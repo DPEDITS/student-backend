@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import * as React from 'react';
+import { AppProvider } from '@toolpad/core/AppProvider';
 import { useTheme } from '@mui/material/styles';
 import './App.css';
 import colorSharp from './assets/img/color-sharp.png';
 import colorSharp1 from './assets/img/color-sharp2.png';
 import { Helmet } from "react-helmet";
+
+
 
 function App() {
   const theme = useTheme();
@@ -52,123 +55,253 @@ function App() {
   };
 
   return (
-    <div
-      className="App"
-      style={{
-        backgroundColor,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        padding: '20px',
-        position: 'relative',
-        overflow: 'hidden',
-        flexDirection: 'column', // Ensure footer stays at the bottom
-      }}
-    >
+    <AppProvider theme={theme}>
+
+  <Helmet>
+    <title>Student Database Form</title>
+    <meta name="description" content="Fill in student details to register in our secure database." />
+    <meta name="keywords" content="student database, form, registration, SIC, email" />
+    <meta name="author" content="Your Name" />
+  </Helmet>
+
+
       <div
+        className="App"
         style={{
-          backgroundColor: cardColor,
-          padding: '40px 30px',
-          borderRadius: '20px',
-          boxShadow: cardShadow,
-          width: '100%',
-          maxWidth: '420px',
-          color: textColor,
-          fontFamily: 'SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-          zIndex: 2,
+          backgroundColor,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          padding: '20px',
+          position: 'relative',
+          overflow: 'hidden',
+          transition: 'background-color 0.4s ease',
+          flexDirection: 'column', // Ensure footer stays at the bottom
         }}
       >
-        <h2 style={{ textAlign: 'center', marginBottom: '12px', fontWeight: '700', fontSize: '28px' }}>
-          Student Database
-        </h2>
-        <p style={{ textAlign: 'center', marginBottom: '30px', fontSize: '15px', color: darkMode ? '#a0a0a0' : '#555555' }}>
-          Welcome Students, please fill in your details
-        </p>
-
-        <form onSubmit={handleSubmit}>
-          {['studentName', 'email', 'rollNumber'].map((field, index) => (
-            <div style={{ marginBottom: '20px' }} key={index}>
-              <input
-                name={field}
-                type={field === 'email' ? 'email' : 'text'}
-                placeholder={field === 'studentName' ? 'Student Name *' : field === 'email' ? 'Email *' : 'SIC *'}
-                required
-                style={{
-                  width: '100%',
-                  padding: '12px',
-                  borderRadius: '10px',
-                  border: `1px solid ${darkMode ? '#333' : '#ccc'}`,
-                  backgroundColor: darkMode ? '#2c2c2e' : '#fafafa',
-                  color: textColor,
-                  outline: 'none',
-                  fontSize: '15px',
-                  transition: 'all 0.3s ease',
-                }}
-                onFocus={(e) => (e.target.style.borderColor = accentColor)}
-                onBlur={(e) => (e.target.style.borderColor = darkMode ? '#333' : '#ccc')}
-              />
-            </div>
-          ))}
-
-          <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', fontSize: '14px', color: darkMode ? '#aaa' : '#555' }}>
-            <input
-              type="checkbox"
-              id="rememberMe"
-              style={{ marginRight: '8px', cursor: 'pointer' }}
-            />
-            <label htmlFor="rememberMe">Remember Me</label>
-          </div>
-
-          <button
-            type="submit"
+        <div
+          style={{
+            backgroundColor: cardColor,
+            padding: '40px 30px',
+            borderRadius: '20px',
+            boxShadow: cardShadow,
+            width: '100%',
+            maxWidth: '420px',
+            color: textColor,
+            fontFamily:
+              'SF Pro Display, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+            transition: 'background-color 0.4s ease, color 0.4s ease',
+            zIndex: 2,
+          }}
+        >
+          <h2
             style={{
-              width: '100%',
-              backgroundColor: accentColor,
-              color: 'white',
-              fontWeight: '600',
-              padding: '12px',
-              border: 'none',
-              borderRadius: '10px',
-              cursor: 'pointer',
-              fontSize: '16px',
+              textAlign: 'center',
+              marginBottom: '12px',
+              fontWeight: '700',
+              fontSize: '28px',
             }}
           >
-            Submit Details
-          </button>
-        </form>
-      </div>
+            Student Database
+          </h2>
+          <p
+            style={{
+              textAlign: 'center',
+              marginBottom: '30px',
+              fontSize: '15px',
+              color: darkMode ? '#a0a0a0' : '#555555',
+            }}
+          >
+            Welcome Students, please fill in your details
+          </p>
 
-      <img
-        className="background-image-left"
-        src={colorSharp}
-        alt="Background Left"
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          height: '100%',
-          opacity: 0.5,
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
-      />
-      <img
-        className="background-image-right"
-        src={colorSharp1}
-        alt="Background Right"
-        style={{
-          position: 'absolute',
-          right: 0,
-          top: 0,
-          height: '100%',
-          opacity: 0.5,
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}
-      />
-    </div>
+          <form onSubmit={handleSubmit}>
+            {['studentName', 'email', 'rollNumber'].map((field, index) => (
+              <div style={{ marginBottom: '20px' }} key={index}>
+                <input
+                  name={field}
+                  type={field === 'email' ? 'email' : 'text'}
+                  placeholder={
+                    field === 'studentName'
+                      ? 'Student Name *'
+                      : field === 'email'
+                      ? 'Email *'
+                      : 'SIC *'
+                  }
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    borderRadius: '10px',
+                    border: `1px solid ${darkMode ? '#333' : '#ccc'}`,
+                    backgroundColor: darkMode ? '#2c2c2e' : '#fafafa',
+                    color: textColor,
+                    outline: 'none',
+                    fontSize: '15px',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onFocus={(e) =>
+                    (e.target.style.borderColor = accentColor)
+                  }
+                  onBlur={(e) =>
+                    (e.target.style.borderColor = darkMode ? '#333' : '#ccc')
+                  }
+                />
+              </div>
+            ))}
+
+            <div
+              style={{
+                marginBottom: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                fontSize: '14px',
+                color: darkMode ? '#aaa' : '#555',
+              }}
+            >
+              <input
+                type="checkbox"
+                id="rememberMe"
+                style={{
+                  marginRight: '8px',
+                  cursor: 'pointer',
+                }}
+              />
+              <label htmlFor="rememberMe">Remember Me</label>
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                width: '100%',
+                backgroundColor: accentColor,
+                color: 'white',
+                fontWeight: '600',
+                padding: '12px',
+                border: 'none',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                fontSize: '16px',
+                transition: 'background-color 0.3s ease',
+              }}
+            >
+              Submit Details
+            </button>
+          </form>
+
+          <div style={{ marginTop: '20px', textAlign: 'center' }}>
+            {/* Dark/Light Mode Toggle Switch */}
+            <label
+              htmlFor="mode-switch"
+              style={{
+                position: 'relative',
+                display: 'inline-block',
+                width: '60px',
+                height: '34px',
+              }}
+            >
+              <input
+                type="checkbox"
+                id="mode-switch"
+                checked={darkMode}
+                onChange={toggleMode}
+                style={{
+                  opacity: 0,
+                  width: 0,
+                  height: 0,
+                }}
+              />
+              <span
+                style={{
+                  position: 'absolute',
+                  cursor: 'pointer',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: darkMode ? '#4b4b4b' : '#ddd',
+                  transition: '.4s',
+                  borderRadius: '34px',
+                }}
+              >
+                <span
+                  style={{
+                    position: 'absolute',
+                    content: '',
+                    height: '26px',
+                    width: '26px',
+                    borderRadius: '50%',
+                    left: darkMode ? '30px' : '4px',
+                    bottom: '4px',
+                    backgroundColor: darkMode ? '#fff' : '#333',
+                    transition: '.4s',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {/* Emoji for Moon/Sun inside the slider circle */}
+                  <span
+                    style={{
+                      fontSize: '18px',
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    {darkMode ? '🌙' : '🌞'}
+                  </span>
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        {/* Background Images */}
+        <img
+          className="background-image-left"
+          src={colorSharp}
+          alt="Background Left"
+          style={{
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            height: '100%',
+            opacity: 0.5,
+            zIndex: 1,
+            pointerEvents: 'none',
+          }}
+        />
+        <img
+          className="background-image-right"
+          src={colorSharp1}
+          alt="Background Right"
+          style={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            height: '100%',
+            opacity: 0.5,
+            zIndex: 1,
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Footer Section */}
+        <footer
+          style={{
+            position: 'absolute',
+          textAlign: 'center',
+            color: darkMode ? '#aaa' : '#555',
+            fontSize: '14px',
+          }}
+        >
+
+        </footer>
+      </div>
+    </AppProvider>
   );
 }
 
 export default App;
+      
+               
