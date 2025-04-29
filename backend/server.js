@@ -1,39 +1,51 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+require('dotenv').config(); // Load MongoDB URI from environment variables
+
 const app = express();
-const PORT = 5000; // you can choose any port
-const mysql = require('mysql2');
-app.use(cors());
-app.use(express.json()); // to parse JSON bodies
 
+// Middleware
+app.use(cors()); // Enable CORS for all routes
+app.use(bodyParser.json()); // Parse incoming JSON requests
 
+// Connect to MongoDB Atlas using the connection string from environment variables
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Connected to MongoDB Atlas');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+  });
 
-// Create a connection pool
-const db = mysql.createPool({
-  host: 'localhost', // or your database host
-  user: 'root', // replace with your MariaDB username
-  password: '', // replace with your MariaDB password
-  database: 'studdb', // your database name
+// Define a schema for student details
+const studentSchema = new mongoose.Schema({
+  studentName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  rollNumber: { type: String, required: true },
 });
 
-// Simple route to receive form data
-app.post('/submit', (req, res) => {
-    const { studentName, email, rollNumber } = req.body;
-  
-    const sql = "INSERT INTO STUDENTS (studentName, email, rollNumber) VALUES (?, ?, ?)";
-  
-    db.query(sql, [studentName, email, rollNumber], (err, result) => {
-      if (err) {
-        console.error('Error inserting data:', err);
-        return res.status(500).json({ message: 'Database error' });
-      }
-  
-      console.log('Student data inserted:', result);
-      res.status(200).json({ message: 'Student details saved successfully' });
-    });
-  });
-  
+// Create a model based on the schema
+const Student = mongoose.model('Student', studentSchema);
 
+// Route to handle form submission
+app.post('/submit', async (req, res) => {
+  const { studentName, email, rollNumber } = req.body;
+
+  try {
+    const newStudent = new Student({ studentName, email, rollNumber });
+    await newStudent.save();
+
+    res.status(200).json({ message: 'Student details submitted successfully!' });
+  } catch (error) {
+    console.error('Error saving student:', error);
+    res.status(500).json({ message: 'Failed to submit student details.', error: error.message });
+  }
+});
+
+// Start the server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
