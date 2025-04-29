@@ -21,7 +21,7 @@ function App() {
     const rollNumber = formData.get('rollNumber');
 
     try {
-      const response = await fetch('http://localhost:5000/submit', {
+      const response = await fetch('/.netlify/functions/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
